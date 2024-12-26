@@ -15,6 +15,32 @@ class Program
         // バージョンを表示
         Console.WriteLine($"プロジェクトバージョン: {version}");
 
+
+        // 新しいPathを設定する
+        string newPath = @"C:\Program Files\Git\bin";  // 追加したいディレクトリ（例：Gitのインストールパス）
+
+        // 現在のPathに新しいパスを追加
+        string currentPath = Environment.GetEnvironmentVariable("PATH");
+        string updatedPath = currentPath + ";" + newPath;
+
+        // プロセスの環境変数に反映させる
+        Environment.SetEnvironmentVariable("PATH", updatedPath, EnvironmentVariableTarget.Process);
+
+
+        // 変更したいディレクトリのパス
+        string newDirectory = @"..\..\..";
+
+        try
+        {
+            // 作業ディレクトリを変更
+            Directory.SetCurrentDirectory(newDirectory);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"エラー: {ex.Message}");
+        }
+
+
         // Gitのコミットハッシュを取得
         string commitHash = GetGitCommitHash();
 
@@ -32,6 +58,7 @@ class Program
     {
         try
         {
+
             // プロセスを設定
             ProcessStartInfo startInfo = new ProcessStartInfo
             {
@@ -45,6 +72,8 @@ class Program
             // プロセスを開始
             using (Process process = Process.Start(startInfo))
             {
+
+
                 // 出力を読み取って結果を返す
                 using (System.IO.StreamReader reader = process.StandardOutput)
                 {
